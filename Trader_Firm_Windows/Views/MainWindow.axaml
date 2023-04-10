@@ -1,0 +1,62 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Trader_Firm_Windows.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Trader_Firm_Windows.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Trader_Firm_Windows">
+
+    <Grid Background="#fff">
+        <DockPanel LastChildFill="True">
+            <Border x:Name="Auth" Margin="50" Background="#1e6b1d" CornerRadius="10" IsVisible="True">
+                <StackPanel Margin="20">
+                    <Button HorizontalAlignment="Right" VerticalAlignment="Top" Content="X" Width="30" Height="30" Margin="0 5 5 0" 
+                            DockPanel.Dock="Right" Click="HideBorder_Click" />
+                    <TextBlock Text="Для продолжения необходимо авторезироватся." FontSize="20" TextAlignment="Center" />
+
+                    <StackPanel Orientation="Horizontal" Margin="0 10" HorizontalAlignment="Center">
+                        <TextBlock Text=" Логин: " FontSize="16" />
+                        <TextBox Name="LoginTextBox" Width="200" FontSize="16" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0 10" HorizontalAlignment="Center">
+                        <TextBlock  Text="Пароль: " FontSize="16" />
+                        <TextBox Name="PasswordBox" Width="200" FontSize="16" />
+                    </StackPanel>
+                                
+                    <StackPanel Orientation="Horizontal" Margin="0 10" HorizontalAlignment="Center">
+                        <TextBlock  x:Name="StatusBar" HorizontalAlignment="Center" Text="Авторизация не пройдена." FontSize="16" />
+                    </StackPanel>
+
+                    <Button Background="#cfa02b" Content="Вход" Margin="0 5" FontSize="16" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Click="LoginButton_Click" />
+                </StackPanel>
+            </Border>
+            
+            <StackPanel x:Name="Menu" IsVisible="False">
+                <Menu DockPanel.Dock="Top">
+                    <MenuItem Header="Меню">
+                        <MenuItem Header="Добавление товара в базу данных системы"/>
+                        <MenuItem Header="Добавление товара на склад магазина"/>
+                        <MenuItem Header="Просмотр информации о товаре в конкретном магазине"/>
+                        <MenuItem Header="Обновление информации о товаре в конкретном магазине"/>
+                        <MenuItem Header="Удаление товара со склада магазина"/>
+                        <MenuItem Header="Создание отчёта со склада магазина"/>
+                        <MenuItem Header="Генерация чека после продажи товар(а/ов)"/>
+                        <MenuItem Header="Генерация Счет-фактуры поставки"/>
+                        <MenuItem Header="Генерация формы возврата"/>
+                        <MenuItem Header="Создание пользователей Системы"/>
+                        <MenuItem Header="Обновление информации о Магазине"/>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem x:Name="StoreMenu" Header="Выбор магазина">
+                       
+                    </MenuItem>
+                </Menu>
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+
+</Window>
