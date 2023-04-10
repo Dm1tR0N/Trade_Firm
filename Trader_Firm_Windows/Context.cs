@@ -1,18 +1,13 @@
-﻿using System;
-using Npgsql;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Npgsql;
 using Trader_Firm_Windows.DataBase.Tables;
-using static Trader_Firm_Windows.DataBase.Connection;
 
 namespace Trader_Firm_Windows
 {
     public class Context : DbContext
-    {
-        public Context(DbContextOptions<Context> options) : base(options)
-        {
-        }
-          
+    {     
         public DbSet<users> Users { get; set; }
         public DbSet<stores> Stores { get; set; }
         public DbSet<store_products> Store_Products { get; set; }
@@ -32,6 +27,7 @@ namespace Trader_Firm_Windows
                              "Database=TradeFirm1;" +
                              "Username=postgres;" +
                              "Password=1234;";
+
             optionsBuilder.UseNpgsql(connString);
         }
     }

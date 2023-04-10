@@ -12,10 +12,10 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Trader_Firm_Windows
-build_property.ProjectDir = C:\Users\Дмитрий\Desktop\Projects\Paraktica\Trader_Firm_Windows\Trader_Firm_Windows\
+build_property.ProjectDir = C:\Users\Дмитрий\Desktop\Projects\Trade_Firm\Trader_Firm_Windows\
 
-[C:/Users/Дмитрий/Desktop/Projects/Paraktica/Trader_Firm_Windows/Trader_Firm_Windows/App.axaml]
+[C:/Users/Дмитрий/Desktop/Projects/Trade_Firm/Trader_Firm_Windows/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Users/Дмитрий/Desktop/Projects/Paraktica/Trader_Firm_Windows/Trader_Firm_Windows/Views/MainWindow.axaml]
+[C:/Users/Дмитрий/Desktop/Projects/Trade_Firm/Trader_Firm_Windows/Views/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

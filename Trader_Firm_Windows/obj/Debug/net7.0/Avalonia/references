@@ -27,8 +27,6 @@ C:\Users\Дмитрий\.nuget\packages\avalonia\0.10.18\lib\netcoreapp2.0\Avalo
 C:\Users\Дмитрий\.nuget\packages\avalonia.win32\0.10.18\lib\netstandard2.0\Avalonia.Win32.dll
 C:\Users\Дмитрий\.nuget\packages\avalonia.x11\0.10.18\lib\netstandard2.0\Avalonia.X11.dll
 C:\Users\Дмитрий\.nuget\packages\dynamicdata\7.1.1\lib\net5.0\DynamicData.dll
-C:\Users\Дмитрий\.nuget\packages\entityframework\6.4.4\lib\netstandard2.1\EntityFramework.dll
-C:\Users\Дмитрий\.nuget\packages\entityframework\6.4.4\lib\netstandard2.1\EntityFramework.SqlServer.dll
 C:\Users\Дмитрий\.nuget\packages\harfbuzzsharp\2.8.2.1-preview.108\lib\net6.0\HarfBuzzSharp.dll
 C:\Users\Дмитрий\.nuget\packages\jetbrains.annotations\10.3.0\lib\netstandard1.0\JetBrains.Annotations.dll
 C:\Users\Дмитрий\.nuget\packages\microsoft.codeanalysis.csharp\3.4.0\lib\netstandard2.0\Microsoft.CodeAnalysis.CSharp.dll
@@ -36,7 +34,18 @@ C:\Users\Дмитрий\.nuget\packages\microsoft.codeanalysis.csharp.scripting\
 C:\Users\Дмитрий\.nuget\packages\microsoft.codeanalysis.common\3.4.0\lib\netstandard2.0\Microsoft.CodeAnalysis.dll
 C:\Users\Дмитрий\.nuget\packages\microsoft.codeanalysis.scripting.common\3.4.0\lib\netstandard2.0\Microsoft.CodeAnalysis.Scripting.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\Microsoft.CSharp.dll
-C:\Users\Дмитрий\.nuget\packages\microsoft.extensions.logging.abstractions\6.0.0\lib\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Дмитрий\.nuget\packages\microsoft.entityframeworkcore.abstractions\8.0.0-preview.2.23128.3\lib\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\Дмитрий\.nuget\packages\microsoft.entityframeworkcore\8.0.0-preview.2.23128.3\lib\net6.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\Дмитрий\.nuget\packages\microsoft.entityframeworkcore.relational\8.0.0-preview.2.23128.3\lib\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\Дмитрий\.nuget\packages\microsoft.extensions.caching.abstractions\8.0.0-preview.2.23128.3\lib\net7.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Users\Дмитрий\.nuget\packages\microsoft.extensions.caching.memory\8.0.0-preview.2.23128.3\lib\net7.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\Дмитрий\.nuget\packages\microsoft.extensions.configuration.abstractions\8.0.0-preview.2.23128.3\lib\net7.0\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\Дмитрий\.nuget\packages\microsoft.extensions.dependencyinjection.abstractions\8.0.0-preview.2.23128.3\lib\net7.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Дмитрий\.nuget\packages\microsoft.extensions.dependencyinjection\8.0.0-preview.2.23128.3\lib\net7.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\Дмитрий\.nuget\packages\microsoft.extensions.logging.abstractions\8.0.0-preview.2.23128.3\lib\net7.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Дмитрий\.nuget\packages\microsoft.extensions.logging\8.0.0-preview.2.23128.3\lib\net7.0\Microsoft.Extensions.Logging.dll
+C:\Users\Дмитрий\.nuget\packages\microsoft.extensions.options\8.0.0-preview.2.23128.3\lib\net7.0\Microsoft.Extensions.Options.dll
+C:\Users\Дмитрий\.nuget\packages\microsoft.extensions.primitives\8.0.0-preview.2.23128.3\lib\net7.0\Microsoft.Extensions.Primitives.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\Microsoft.VisualBasic.Core.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\Microsoft.VisualBasic.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\Microsoft.Win32.Primitives.dll
@@ -44,12 +53,12 @@ C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\Microso
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\mscorlib.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\netstandard.dll
 C:\Users\Дмитрий\.nuget\packages\npgsql\8.0.0-preview.2\lib\net7.0\Npgsql.dll
+C:\Users\Дмитрий\.nuget\packages\npgsql.entityframeworkcore.postgresql\8.0.0-preview.2\lib\net7.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 C:\Users\Дмитрий\.nuget\packages\reactiveui\13.2.10\lib\net5.0\ReactiveUI.dll
 C:\Users\Дмитрий\.nuget\packages\skiasharp\2.88.1-preview.108\lib\net6.0\SkiaSharp.dll
 C:\Users\Дмитрий\.nuget\packages\splat\10.0.1\lib\net5.0\Splat.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.AppContext.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Buffers.dll
-C:\Users\Дмитрий\.nuget\packages\system.codedom\4.7.0\ref\netstandard2.0\System.CodeDom.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Collections.Concurrent.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Collections.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Collections.Immutable.dll
@@ -61,14 +70,12 @@ C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.ComponentModel.EventBasedAsync.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.ComponentModel.Primitives.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.ComponentModel.TypeConverter.dll
-C:\Users\Дмитрий\.nuget\packages\system.configuration.configurationmanager\4.7.0\ref\netstandard2.0\System.Configuration.ConfigurationManager.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Configuration.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Console.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Core.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Data.Common.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Data.DataSetExtensions.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Data.dll
-C:\Users\Дмитрий\.nuget\packages\system.data.sqlclient\4.8.1\ref\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Diagnostics.Contracts.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Diagnostics.Debug.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Diagnostics.DiagnosticSource.dll
@@ -80,7 +87,7 @@ C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Diagnostics.TraceSource.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Diagnostics.Tracing.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.dll
-C:\Users\Дмитрий\.nuget\packages\system.drawing.common\4.7.0\ref\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\Дмитрий\.nuget\packages\system.drawing.common\4.5.0\ref\netstandard2.0\System.Drawing.Common.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Drawing.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Drawing.Primitives.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Dynamic.Runtime.dll
@@ -171,7 +178,6 @@ C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Security.Cryptography.Primitives.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Security.Cryptography.X509Certificates.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Security.dll
-C:\Users\Дмитрий\.nuget\packages\system.security.permissions\4.7.0\ref\netcoreapp3.0\System.Security.Permissions.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Security.Principal.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Security.Principal.Windows.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Security.SecureString.dll
@@ -199,7 +205,6 @@ C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Web.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Web.HttpUtility.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Windows.dll
-C:\Users\Дмитрий\.nuget\packages\system.windows.extensions\4.7.0\ref\netcoreapp3.0\System.Windows.Extensions.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Xml.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Xml.Linq.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\7.0.4\ref\net7.0\System.Xml.ReaderWriter.dll
