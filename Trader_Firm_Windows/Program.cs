@@ -3,6 +3,10 @@ using Avalonia.ReactiveUI;
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
+using Microsoft.EntityFrameworkCore;
+using Trader_Firm_Windows.DataBase;
+using Trader_Firm_Windows.ViewModels;
+using Trader_Firm_Windows.Views;
 
 namespace Trader_Firm_Windows;
 
@@ -22,4 +26,5 @@ class Program
             .LogToTrace()
             .UseReactiveUI();
     
+
 }

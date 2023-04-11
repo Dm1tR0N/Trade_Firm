@@ -9,8 +9,8 @@ public class sales
     [Key]
     public int SaleId { get; set; }
 
-    public stores StoreId { get; set; }
+    public stores? StoreId { get; set; }
 
-    public users UserId { get; set; }
+    public users? UserId { get; set; }
     public DateTime SaleDate { get; set; }
 }

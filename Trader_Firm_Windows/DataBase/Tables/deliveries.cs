@@ -8,7 +8,7 @@ public class deliveries
 {
     [Key]
     public int DeliveryId { get; set; }
-    public stores StoreId { get; set; } 
-    public users UserId { get; set; }
+    public stores? StoreId { get; set; } 
+    public users? UserId { get; set; }
     public DateTime DeliveryDate { get; set; }
 }

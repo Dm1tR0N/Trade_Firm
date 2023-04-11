@@ -9,14 +9,14 @@ namespace Trader_Firm_Windows.DataBase;
 
 public static class Connection
 {
-    public static DbContextOptions Connect()
+    public static string Connect()
     {
-        var connString = "Server=localhost;" +
-                         "Port=5432;" +
-                         "Database=TradeFirm1;" +
-                         "Username=postgres;" +
-                         "Password=1234;";
-
-        return null;
+        var connString = 
+            "Server=localhost;" +
+            "Port=5432;" +
+            "Database=TradeFirm1;" +
+            "Username=postgres;" +
+            "Password=1234;";
+        return connString;
     }
 }

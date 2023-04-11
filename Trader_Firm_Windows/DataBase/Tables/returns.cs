@@ -9,8 +9,8 @@ public class returns
     [Key]
     public int ReturnId { get; set; }
 
-    public stores StoreId { get; set; }
+    public stores? StoreId { get; set; }
 
-    public users UserId { get; set; }
+    public users? UserId { get; set; }
     public DateTime ReturnDate { get; set; }
 }
