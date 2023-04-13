@@ -97,4 +97,50 @@ public class AddFunctions
         }
         _context.SaveChanges();
     }
+    
+    public static void AddProduct(string Title, decimal Price, string Discription)
+    {
+        Context _context = new Context();
+        var productsList = _context.Products.ToList();
+
+        var newProduct = new products
+        {
+            ProductName = Title,
+            Description = Discription,
+            Price = Price
+        };
+
+        productsList.Add(newProduct);
+        _context.Add(newProduct);
+        _context.SaveChanges();
+    }
+
+    public static void UpdateStore(int storeId, int storeMeneger, string newStoreName, string newStoreLocation)
+    {
+        Context _context = new Context();
+        var newStoreMeneger = _context.Users.SingleOrDefault(x => x.Id == storeMeneger);
+        var updateStore = _context.Stores.SingleOrDefault(x => x.StoreId == storeId);
+
+        updateStore.StoreName = newStoreName;
+        updateStore.StoreLocation = newStoreLocation;
+        updateStore.ManagerId = newStoreMeneger;
+
+        _context.SaveChanges();
+    }
+
+    public static void AddProductStore(stores selectedStore, products selectedProduct, int count)
+    {
+        using (var context = new Context())
+        {
+            var newProduct = new store_products
+            {
+                StoreId = selectedStore,
+                ProductId = selectedProduct,
+                Quantity = count
+            };
+            context.StoreProducts.Add(newProduct);
+            context.SaveChanges();
+        }
+    }
+
 }

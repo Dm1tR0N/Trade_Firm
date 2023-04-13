@@ -3,13 +3,15 @@
         xmlns:vm="using:Trader_Firm_Windows.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="450"
+        MinWidth="1500"
+        MinHeight="450"
         x:Class="Trader_Firm_Windows.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="Торговая фирма">
 
-    <Grid Background="#b5cef5" ShowGridLines="True">
+    <Grid Background="#b5cef5" ShowGridLines="True" MinWidth="900">
         <!-- Окно авторизации -->
             <StackPanel x:Name="Auth"  Background="#3c90b8" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Stretch" IsVisible="True" Margin="50">
                 <Button HorizontalAlignment="Right" VerticalAlignment="Top" Content="X" Width="30" Height="30" Margin="0 5 5 0" 
@@ -38,7 +40,7 @@
                 <Menu DockPanel.Dock="Top">
                     <MenuItem Header="Меню">
                         <MenuItem Click="Add_Product" Header="Добавление товара в базу данных системы"/>
-                        <MenuItem Header="Добавление товара на склад магазина"/>
+                        <MenuItem Click="Add_Product_Store" Header="Добавление товара на склад магазина"/>
                         <MenuItem Header="Просмотр информации о товаре в конкретном магазине"/>
                         <MenuItem Header="Обновление информации о товаре в конкретном магазине"/>
                         <MenuItem Header="Удаление товара со склада магазина"/>
@@ -70,6 +72,7 @@
                 <Button HorizontalAlignment="Right" Background="#acadd2" Content="Выход" Click="LeaveAcc"></Button>
                 <Button HorizontalAlignment="Right" Background="#acadd2" Content="Показать информацию магазина" Click="SelectStore"></Button>
                 <TextBlock Text="" Margin="5, 5, 0,0" IsEnabled="False" x:Name="InfoBoxMenu"></TextBlock>
+                <TextBlock Text="" Margin="5, 5, 0,0" IsEnabled="False" x:Name="InfoRole"></TextBlock>
             </StackPanel>
             
             <!-- Окно создания пользователя -->
@@ -150,9 +153,9 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <TextBlock Margin="10,0, 0, 0" Text="Логин" />
-                <TextBox x:Name="UpUserLogin" Margin="10,5, 10, 0" />
+                <TextBox x:Name="UpUserLogin" Margin="10,5, 10, 0" Text=""/>
                 <TextBlock Margin="10,0, 0, 0" Text="Пароль" />
-                <TextBox x:Name="UpUserPass" Margin="10,5, 10, 0" />
+                <TextBox x:Name="UpUserPass" Margin="10,5, 10, 0" Text=""/>
                 <TextBlock Margin="10,0, 0, 0" Text="Роль."/>
                 <ComboBox x:Name="UpUserRole" Margin="10,5, 10, 0">
                     <ComboBox.ItemTemplate>
@@ -191,14 +194,15 @@
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{Binding StoreId}" Margin="10 0 5 0"/>
+                            <TextBlock Text="{Binding StoreName}"></TextBlock>
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <TextBlock Margin="10,0, 0, 0" Text="Название магазина" />
-            <TextBox x:Name="UpStoreName" Margin="10,5, 10, 0" />
-            <TextBlock Margin="10,0, 0, 0" Text="Адрес машазина" />
-            <TextBox x:Name="UpStoreLocation" Margin="10,5, 10, 0" />
+            <TextBox x:Name="UpStoreName" Margin="10,5, 10, 0" Text=""/>
+            <TextBlock Margin="10,0, 0, 0" Text="Адрес магазина" />
+            <TextBox x:Name="UpStoreLocation" Margin="10,5, 10, 0" Text=""/>
             <TextBlock Margin="10,0, 0, 0" Text="Менеджер магазина"/>
             <ComboBox x:Name="UpStoreMeneger" Margin="10,5, 10, 0">
                 <ComboBox.ItemTemplate>
@@ -211,11 +215,45 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
-                <Button Background="#acadd2" Content="Обновить данные" Click="AP_UpUser_Create" Margin="0,0,10,0" />
+                <Button Background="#acadd2" Content="Обновить данные" Click="AP_UpStore_Update" Margin="0,0,10,0" />
                 <Button Background="#acadd2" Content="Отмена" Click="AP_UpStore_Cancel" Margin="10,0, 10, 0"/>
             </StackPanel>
             <TextBlock HorizontalAlignment="Center" x:Name="UpStoreInfoBox" Text=""></TextBlock>
         </StackPanel>
+        
+        <StackPanel x:Name="AddProductStore" Background="#3c90b8" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="50" IsVisible="False">
+            <TextBlock HorizontalAlignment="Center" FontSize="24" Text="Пополнить склад магазина"></TextBlock>
+            <!-- public int IdStoreProducts { get; set; } -->
+            <!-- public stores? StoreId { get; set; } -->
+            <!-- public products? ProductId { get; set; } -->
+            <!-- public int Quantity { get; set; } -->
+            <TextBlock Margin="10,0, 0, 0" Text="Список продуктов которые можно заказать. Формат {Название, Цена, Описание}"/>
+            <ComboBox x:Name="AddProductStore_Product" Margin="10,5, 10, 0">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding ProductName}" Margin="10 0 5 0"/>
+                            <TextBlock Text="{Binding Price}" Margin="10 0 0 0"></TextBlock>
+                            <TextBlock Text="₽"></TextBlock>
+                            <TextBlock Text="{Binding Description}" Margin="10 0 5 0"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBlock Margin="10,0, 0, 0" Text="Количество товара" />
+            <TextBox x:Name="AddProductStore_CuounProduct" Margin="10,5, 10, 0" Text=""/>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
+                <Button Background="#acadd2" Content="Добавить продукт" Click="Menu_AddProductStore_Add" Margin="0,0,10,0" />
+                <Button Background="#acadd2" Content="Закрыть" Click="Menu_AddProductStore_Cancel" Margin="10,0, 10, 0"/>
+            </StackPanel>
+            <ScrollViewer Height="300" Width="500">
+               <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Background="#b5cef5">
+                   <TextBlock HorizontalAlignment="Center" Text="Чек" Margin="225, 0, 225, 0"></TextBlock>
+                   <TextBlock HorizontalAlignment="Stretch" x:Name="AddProductStore_InfoBox" Text="" TextWrapping="Wrap"></TextBlock>
+                   <TextBlock HorizontalAlignment="Right" Text="" x:Name="AddProductStore_TotalCost"></TextBlock>
+               </StackPanel>
+            </ScrollViewer>
+        </StackPanel>
     </Grid>
-
 </Window>

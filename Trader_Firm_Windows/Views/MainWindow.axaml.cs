@@ -23,30 +23,43 @@ public partial class MainWindow : Window
     public static bool isAuth = false; // false - Сотрдник не авторизирован, true - сотрудник авторизирован
     public static int number_attempts = 0; // Хранит количество не удачных входов в аккаунт
     public static int idUser = 0;
-    public MainWindow()
+    decimal totalCost = 0; // Хранит сумму чека при добовлении товара на склад магазина
+    
+    public void updateListStores()
     {
-        InitializeComponent();
         Context _context = new Context();
         var stores = _context.Stores.ToList();
         StoreMenu.Items = stores;
+    }
+
+    public MainWindow()
+    {
+        InitializeComponent();
+        updateListStores();
     }
 
     // 1 Функция авторизации сотрудника
     private void LoginButton_Click(object? sender, RoutedEventArgs e)
     {
         Context _context = new Context();
-        var user = _context.Users.SingleOrDefault(u => u.Name == LoginTextBox.Text && u.Password == PasswordBox.Text);
+        var user = _context.Users.Include(x => x.Role).SingleOrDefault(u => u.Name == LoginTextBox.Text && u.Password == PasswordBox.Text);
 
         if (user != null)
         {
             StatusBar.Text = $"Добро пожаловать {user.Name}!";
+            InfoRole.Text = $"Ваша должность: {user.Role.Title}";
             idUser = user.Id;
             number_attempts = 0; // Обнуление попыток входа.
             isAuth = true;
+            Auth.IsVisible = false; // Скрыть окно авторизации
+            Menu.IsVisible = true; // Показать меню
+            StoreInfo.IsVisible = true;
+            LoginTextBox.Text = "";
+            PasswordBox.Text = "";
         }
         else
         {
-            if ( number_attempts >= 3)
+            if (number_attempts >= 3)
             {
                 StatusBar.Text = $"Вы не авторезированный уже {number_attempts} раза,\n" +
                                  $"Обратитесь к Администратору для востонавления доступа к аккаунту!";
@@ -55,14 +68,11 @@ public partial class MainWindow : Window
             {
                 StatusBar.Text = $"Не авторизирован!";
             }
-            
+
             number_attempts++;
             PasswordBox.Text = "";
         }
     }
-
-    // 2 Добавления аккаунта
-    
 
     // 3 Функциядля того что бы скрыть окно авторизации
     private void HideBorder_Click(object? sender, RoutedEventArgs e)
@@ -88,7 +98,7 @@ public partial class MainWindow : Window
         Context _context = new Context();
         var checkUser = _context.Users.SingleOrDefault(x => x.Id == idUser);
         var role = _context.Roles.SingleOrDefault(x => x.IdRoles == 1); // Роль администратора
-        
+
         if (checkUser.Role == role) // Создавать аккаунты может только администратор
         {
             Menu.IsVisible = false;
@@ -117,7 +127,8 @@ public partial class MainWindow : Window
         if (checkUser == null)
         {
             AddFunctions.AddUser(_context, UserLogin.Text, UserPass.Text, Convert.ToInt32(UserRole.Text));
-            InfoBox.Text = $"Аккаунт создан\nLogin: {UserLogin.Text}\nPassword: {UserPass.Text}\nДоя выхода нажмите 'Отмена'\n\n";
+            InfoBox.Text =
+                $"Аккаунт создан\nLogin: {UserLogin.Text}\nPassword: {UserPass.Text}\nДоя выхода нажмите 'Отмена'\n\n";
 
             UserLogin.Text = "";
             UserPass.Text = "";
@@ -127,7 +138,7 @@ public partial class MainWindow : Window
         {
             InfoBox.Text = $"Создатьаккаунт не удалось!\nВозможно логин ({UserLogin.Text}) уже жанят.\n\n";
         }
-        
+
     }
 
     // 6 Кнопка что бы выйти из аккаунта
@@ -147,7 +158,7 @@ public partial class MainWindow : Window
         Context _context = new Context();
         var checkUser = _context.Users.SingleOrDefault(x => x.Id == idUser);
         var role = _context.Roles.SingleOrDefault(x => x.IdRoles == 1); // Роль администратора
-        
+
         if (checkUser.Role == role) // Создавать аккаунты может только администратор
         {
             AddProductWin.IsVisible = true;
@@ -158,24 +169,6 @@ public partial class MainWindow : Window
         {
             InfoBoxMenu.Text = $"К этой функции есть доступ только у Администрации!";
         }
-    }
-    
-    // 9 Функиця создания продукта
-    public void AddProduct(string Title, decimal Price, string Discription)
-    {
-        Context _context = new Context();
-        var productsList = _context.Products.ToList();
-
-        var newProduct = new products
-        {
-            ProductName = Title,
-            Description = Discription,
-            Price = Price
-        };
-
-        productsList.Add(newProduct);
-        _context.Add(newProduct);
-        _context.SaveChanges();
     }
 
     // 10 Кнопка закрыть окно создания продукта
@@ -192,11 +185,12 @@ public partial class MainWindow : Window
         Context _context = new Context();
         var checkUser = _context.Users.SingleOrDefault(x => x.Id == idUser);
         var role = _context.Roles.SingleOrDefault(x => x.IdRoles == 1); // Роль администратора
-        
+
         if (checkUser.Role == role) // Создавать аккаунты может только администратор
         {
-            AddProduct(ProductName.Text, Convert.ToDecimal(ProductPrice.Text), ProductDiscription.Text);
-            ProductInfoBox.Text = $"Продукт: {ProductName.Text} Стоимостью {ProductPrice.Text}\nДля выхода нажмите 'Отмена'\n\n";
+            AddFunctions.AddProduct(ProductName.Text, Convert.ToDecimal(ProductPrice.Text), ProductDiscription.Text);
+            ProductInfoBox.Text =
+                $"Продукт: {ProductName.Text} Стоимостью {ProductPrice.Text}\nДля выхода нажмите 'Отмена'\n\n";
 
             ProductName.Text = "";
             ProductDiscription.Text = "";
@@ -214,7 +208,7 @@ public partial class MainWindow : Window
         Context _context = new Context();
         var checkUser = _context.Users.SingleOrDefault(x => x.Id == idUser);
         var role = _context.Roles.SingleOrDefault(x => x.IdRoles == 1); // Роль администратора
-        
+
         if (checkUser.Role == role) // Создавать аккаунты может только администратор
         {
             Menu.IsVisible = false;
@@ -246,9 +240,7 @@ public partial class MainWindow : Window
             if (selectedUser != null)
             {
                 AddFunctions.AddStore(StoreName.Text, StoreLocation.Text, selectedUser);
-                Context _context = new Context();
-                var stores = _context.Stores.ToList();
-                StoreMenu.Items = stores;
+                updateListStores();
                 AddStoreInfoBox.Text = "Магазин создан!";
                 StoreName.Text = "";
                 StoreLocation.Text = "";
@@ -271,15 +263,25 @@ public partial class MainWindow : Window
 
     private void AP_UpUser(object? sender, RoutedEventArgs e)
     {
-        Menu.IsVisible = false;
-        UpdateWinAddUser.IsVisible = true;
         Context _context = new Context();
-        var users = _context.Users.ToList();
-        var roles = _context.Roles.ToList();
+        var checkUser = _context.Users.SingleOrDefault(x => x.Id == idUser);
+        var role = _context.Roles.SingleOrDefault(x => x.IdRoles == 1); // Роль администратора
 
-        UpdateUser.Items = users;
-        UpUserRole.Items = roles;
-        StoreInfo.IsVisible = false;
+        if (checkUser.Role == role) // Создавать аккаунты может только администратор
+        {
+            Menu.IsVisible = false;
+            UpdateWinAddUser.IsVisible = true;
+            var users = _context.Users.ToList();
+            var roles = _context.Roles.ToList();
+
+            UpdateUser.Items = users;
+            UpUserRole.Items = roles;
+            StoreInfo.IsVisible = false;
+        }
+        else
+        {
+            InfoBoxMenu.Text = $"К этой функции есть доступ только у Администрации!";
+        }
     }
 
     private void AP_UpUser_Cancel(object? sender, RoutedEventArgs e)
@@ -295,14 +297,14 @@ public partial class MainWindow : Window
         {
             Context _context = new Context();
             var user = _context.Users.ToList();
-        
+
             var selectedUser = (UpdateUser.SelectedItem as users).Id;
             var selectUser = _context.Users.SingleOrDefault(x => x.Id == selectedUser);
 
             var selectedRole = (UpUserRole.SelectedItem as roles).IdRoles;
             var selectRole = _context.Roles.SingleOrDefault(x => x.IdRoles == selectedRole);
 
-            if (selectedUser != null && selectedRole != null)
+            if (selectedUser != null && selectedRole != null && UserLogin.Text != "" && UserPass.Text != "")
             {
                 AddFunctions.UpdateUser(selectedUser, selectedRole, UserLogin.Text, UserPass.Text);
 
@@ -338,7 +340,7 @@ public partial class MainWindow : Window
             StoreInfo_NameStore.Text = $"Название магазина: {storeInfo.StoreName}";
             StoreInfo_StoreLocation.Text = $"Адрес магазина: {storeInfo.StoreLocation}";
             StoreInfo_Meneger.Text = $"Менеджер магазина: {storeInfo.ManagerId.Name}";
-        
+
             var products = _context.StoreProducts.Include(sp => sp.ProductId).Where(x => x.StoreId == storeP).ToList();
             ProductsListStore.Text = "";
             NameProductList.Text = "Продукты магазина";
@@ -356,9 +358,25 @@ public partial class MainWindow : Window
 
     private void AP_UpStore(object? sender, RoutedEventArgs e)
     {
-        UpdateStore.IsVisible = true;
-        Menu.IsVisible = false;
-        StoreInfo.IsVisible = false;
+        Context _context = new Context();
+        var checkUser = _context.Users.SingleOrDefault(x => x.Id == idUser);
+        var role = _context.Roles.SingleOrDefault(x => x.IdRoles == 1); // Роль администратора
+
+        if (checkUser.Role == role) // Создавать аккаунты может только администратор
+        {
+            UpdateStore.IsVisible = true;
+            Menu.IsVisible = false;
+            StoreInfo.IsVisible = false;
+            var store = _context.Stores.ToList();
+            var menegers = _context.Users.Where(x => x.Role.IdRoles == 2).ToList();
+
+            UpStoreId.Items = store;
+            UpStoreMeneger.Items = menegers;
+        }
+        else
+        {
+            InfoBoxMenu.Text = $"К этой функции есть доступ только у Администрации!";
+        }
     }
 
     private void AP_UpStore_Cancel(object? sender, RoutedEventArgs e)
@@ -366,5 +384,89 @@ public partial class MainWindow : Window
         Menu.IsVisible = true;
         StoreInfo.IsVisible = true;
         UpdateStore.IsVisible = false;
+    }
+
+    private void AP_UpStore_Update(object? sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var storeId = (UpStoreId.SelectedItem as stores).StoreId;
+            var storeMeneger = (UpStoreMeneger.SelectedItem as users).Id;
+
+            var newStoreName = UpStoreName.Text;
+            var newStoreLocation = UpStoreLocation.Text;
+
+            if (storeId != null && storeMeneger != null && newStoreName != "" && newStoreLocation != "")
+            {
+                AddFunctions.UpdateStore(storeId, storeMeneger, newStoreName, newStoreLocation);
+                updateListStores();
+                UpStoreInfoBox.Text = $"Данные обновлены!";
+                UpStoreName.Text = "";
+                UpStoreLocation.Text = "";
+            }
+            else
+            {
+                UpStoreInfoBox.Text = "Ошибка! Проверьте все ли поля заолнены.";
+                UpStoreName.Text = "";
+                UpStoreLocation.Text = "";
+            }
+        }
+        catch (Exception exception)
+        {
+            UpStoreInfoBox.Text = "Критическая ошибка! Проверьте все ли поля заолнены.";
+            UpStoreName.Text = "";
+        }
+    }
+    
+    private void Add_Product_Store(object? sender, RoutedEventArgs e)
+    {
+        Context _context = new Context();
+        if (StoreMenu.SelectedItem != null)
+        {
+            var selectedStore = (StoreMenu.SelectedItem as stores).StoreId;
+            var menegerStore = _context.Users.SingleOrDefault(x => x.Id == idUser);
+            var storeInfo = _context.Stores.SingleOrDefault(x => x.StoreId == selectedStore && x.ManagerId == menegerStore);
+            if (storeInfo == null)
+            {
+                InfoBoxMenu.Text = "У вас нет доступа к этому магазину";
+            }
+            else
+            {
+                var products = _context.Products.ToList();
+                AddProductStore_Product.Items = products;
+                AddProductStore.IsVisible = true;
+                Menu.IsVisible = false;
+                StoreInfo.IsVisible = false;
+            }
+        }
+        else
+        {
+            InfoBoxMenu.Text = "Нужно выбрать магазин!";
+        }
+    }
+
+    private void Menu_AddProductStore_Cancel(object? sender, RoutedEventArgs e)
+    {
+        AddProductStore.IsVisible = false;
+        Menu.IsVisible = true;
+        StoreInfo.IsVisible = true;
+    }
+
+    private void Menu_AddProductStore_Add(object? sender, RoutedEventArgs e)
+    {
+        int idProduct = (AddProductStore_Product.SelectedItem as products).ProductId;
+        Context _context = new Context();
+        var selectedProduct = _context.Products.SingleOrDefault(x => x.ProductId == idProduct);
+        var selectedStore = _context.Stores.SingleOrDefault(x => x.StoreId == (StoreMenu.SelectedItem as stores).StoreId);
+        
+        AddProductStore_InfoBox.Text += $"Продукт: {selectedProduct.ProductName}, Количество: {AddProductStore_CuounProduct.Text}\n";
+
+        if (selectedStore != null && selectedProduct != null && AddProductStore_CuounProduct.Text != "")
+        {
+            AddFunctions.AddProductStore(selectedStore, selectedProduct, Convert.ToInt32(AddProductStore_CuounProduct.Text));
+        }
+        
+        totalCost += Convert.ToDecimal(AddProductStore_CuounProduct.Text) * selectedProduct.Price;
+        AddProductStore_TotalCost.Text = $"Итого: {totalCost}₽";
     }
 }
