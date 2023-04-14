@@ -1,5 +1,6 @@
 ﻿using Trader_Firm_Windows.DataBase.Tables;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -12,27 +13,9 @@ public class AddFunctions
     public static void AddUser(Context context, string UserName, string Passord, int Role)
     {
         Context _context = new Context();
-        _context = context;
-        // Роли:
-        // Администратор 1,
-        // Менеджер по снабжению 2,
-        // Аудитор 3,
-        // Сотрудник продаж 4,
-        // Менеджер для каждого магазина 5
-        
-        _context = context;
-        var _roles = _context.Roles.ToList();
+
         var _users = _context.Users.ToList();
-
-        var newRole = new roles
-        {
-            Title = "Admin"
-        };
-        _roles.Add(newRole);
-
-        _context.Add(newRole);
-        _context.SaveChanges();
-
+        
         var roleId = _context.Roles.SingleOrDefault(x => x.IdRoles == Role);
 
         var newUser = new users
@@ -98,6 +81,7 @@ public class AddFunctions
         _context.SaveChanges();
     }
     
+    // Добовление продукта в общий склад
     public static void AddProduct(string Title, decimal Price, string Discription)
     {
         Context _context = new Context();
@@ -115,6 +99,7 @@ public class AddFunctions
         _context.SaveChanges();
     }
 
+    // Обновление информации о магазине
     public static void UpdateStore(int storeId, int storeMeneger, string newStoreName, string newStoreLocation)
     {
         Context _context = new Context();
@@ -128,17 +113,144 @@ public class AddFunctions
         _context.SaveChanges();
     }
 
-    public static void AddProductStore(stores selectedStore, products selectedProduct, int count)
+    // Метод для добавления продукта в магазин
+    public static void AddProductStore(int selectedStore, int selectedProduct, int count)
     {
         using (var context = new Context())
         {
-            var newProduct = new store_products
+            var storeIdCheck = context.Stores.SingleOrDefault(x => x.StoreId == selectedStore);
+            var productIdCheck = context.Products.SingleOrDefault(x => x.ProductId == selectedProduct);
+            
+            // Проверяем наличие записи в таблице store_products для данного магазина и продукта
+            var existingProduct = context.StoreProducts.FirstOrDefault(sp => sp.StoreId == storeIdCheck && sp.ProductId == productIdCheck);
+
+            if (existingProduct != null)
             {
-                StoreId = selectedStore,
-                ProductId = selectedProduct,
-                Quantity = count
+                // Если запись существует, то увеличиваем значение поля Quantity
+                existingProduct.Quantity += count;
+            }
+            else
+            {
+                // Иначе создаем новую запись
+                var storeId = context.Stores.SingleOrDefault(x => x.StoreId == selectedStore);
+                var productId = context.Products.SingleOrDefault(x => x.ProductId == selectedProduct);
+
+                var newProduct = new store_products
+                {
+                    StoreId = storeId,
+                    ProductId = productId,
+                    Quantity = count
+                };
+
+                context.StoreProducts.Add(newProduct);
+            }
+
+            context.SaveChanges();
+        }
+    }
+    
+    // Метод для продажи продукта
+    public static void SellProduct(int productId, int quantity, int storeId, int userId)
+    {
+        using (var context = new Context())
+        {
+            // Проверяем, что магазин с заданным идентификатором существует
+            var store = context.Stores.SingleOrDefault(s => s.StoreId == storeId);
+            if (store == null)
+            {
+                throw new ArgumentException("Магазин с таким идентификатором не найден.");
+            }
+
+            // Проверяем, что продукт с заданным идентификатором существует
+            var product = context.Products.SingleOrDefault(p => p.ProductId == productId);
+            if (product == null)
+            {
+                throw new ArgumentException("Продукт с таким идентификатором не найден.");
+            }
+
+            // Проверяем, что в магазине есть достаточное количество товара
+            var storeProduct = context.StoreProducts
+                .SingleOrDefault(sp => sp.StoreId == store && sp.ProductId == product);
+            if (storeProduct == null || storeProduct.Quantity < quantity)
+            {
+                throw new ArgumentException("В магазине нет достаточного количества товара.");
+            }
+
+            // Создаем объект продажи и сохраняем его в базу данных
+            var sale = new sales
+            {
+                StoreId = store,
+                UserId = context.Users.Find(userId),
+                SaleDate = DateTime.Now.ToUniversalTime()
             };
-            context.StoreProducts.Add(newProduct);
+            context.Sales.Add(sale);
+            context.SaveChanges();
+
+            // Создаем объекты проданных товаров и сохраняем их в базу данных
+            var soldProduct = new sold_products
+            {
+                SaleId = sale,
+                ProductId = product,
+                Quantity = quantity,
+                Price = product.Price
+            };
+            context.SoldProducts.Add(soldProduct);
+            context.SaveChanges();
+
+            // Уменьшаем количество товара в магазине
+            storeProduct.Quantity -= quantity;
+            context.SaveChanges();
+        }
+    }
+    
+    public static void ReturnProduct(int productId, int quantity, int storeId, int userId) // Не работает
+    {
+        using (var context = new Context())
+        {
+            // Проверяем, что магазин с заданным идентификатором существует
+            var store = context.Stores.SingleOrDefault(s => s.StoreId == storeId);
+            if (store == null)
+            {
+                throw new ArgumentException("Магазин с таким идентификатором не найден.");
+            }
+
+            // Проверяем, что продукт с заданным идентификатором существует
+            var product = context.Products.SingleOrDefault(p => p.ProductId == productId);
+            if (product == null)
+            {
+                throw new ArgumentException("Продукт с таким идентификатором не найден.");
+            }
+
+            // Создаем объект возврата и сохраняем его в базу данных
+            var returnObj = new returns
+            {
+                StoreId = store,
+                UserId = context.Users.Find(userId),
+                ReturnDate = DateTime.Now.ToUniversalTime()
+            };
+            context.Returns.Add(returnObj);
+            context.SaveChanges();
+
+            // Проверяем, что в магазине есть достаточное количество товара для возврата
+            var storeProduct = context.StoreProducts.SingleOrDefault(sp => sp.StoreId == store && sp.ProductId == product);
+            if (storeProduct == null || storeProduct.Quantity < quantity)
+            {
+                throw new ArgumentException("В магазине нет достаточного количества товара для возврата.");
+            }
+
+            // Создаем объекты возвращенных товаров и сохраняем их в базу данных
+            var returnedProduct = new returned_products
+            {
+                ReturnId = returnObj,
+                ProductId = product,
+                Quantity = quantity,
+                Price = product.Price
+            };
+            context.ReturnsProducts.Add(returnedProduct);
+            context.SaveChanges();
+
+            // Увеличиваем количество товара в магазине
+            storeProduct.Quantity += quantity;
             context.SaveChanges();
         }
     }

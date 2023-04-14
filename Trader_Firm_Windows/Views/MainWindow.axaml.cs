@@ -36,6 +36,10 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         updateListStores();
+        #if DEBUG
+        this.AttachDevTools();
+        #endif
+        this.WindowState = WindowState.Maximized;
     }
 
     // 1 Функция авторизации сотрудника
@@ -107,7 +111,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            InfoBoxMenu.Text = $"К этой функции есть доступ только у Администрации!";
+            InfoBoxMenu.Text = $"Отказано в доступе!";
         }
     }
 
@@ -136,7 +140,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            InfoBox.Text = $"Создатьаккаунт не удалось!\nВозможно логин ({UserLogin.Text}) уже жанят.\n\n";
+            InfoBox.Text = $"Создать аккаунт не удалось!\nВозможно логин ({UserLogin.Text}) уже жанят.\n\n";
         }
 
     }
@@ -167,7 +171,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            InfoBoxMenu.Text = $"К этой функции есть доступ только у Администрации!";
+            InfoBoxMenu.Text = $"Отказано в доступе!";
         }
     }
 
@@ -219,7 +223,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            InfoBoxMenu.Text = $"К этой функции есть доступ только у Администрации!";
+            InfoBoxMenu.Text = $"Отказано в доступе!";
         }
     }
 
@@ -375,7 +379,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            InfoBoxMenu.Text = $"К этой функции есть доступ только у Администрации!";
+            InfoBoxMenu.Text = $"Отказано в доступе!";
         }
     }
 
@@ -428,7 +432,7 @@ public partial class MainWindow : Window
             var storeInfo = _context.Stores.SingleOrDefault(x => x.StoreId == selectedStore && x.ManagerId == menegerStore);
             if (storeInfo == null)
             {
-                InfoBoxMenu.Text = "У вас нет доступа к этому магазину";
+                InfoBoxMenu.Text = "Отказано в доступе!";
             }
             else
             {
@@ -450,6 +454,8 @@ public partial class MainWindow : Window
         AddProductStore.IsVisible = false;
         Menu.IsVisible = true;
         StoreInfo.IsVisible = true;
+        AddProductStore_InfoBox.Text = "";
+        AddProductStore_TotalCost.Text = "";
     }
 
     private void Menu_AddProductStore_Add(object? sender, RoutedEventArgs e)
@@ -461,22 +467,181 @@ public partial class MainWindow : Window
 
         AddProductStore_InfoBox.Text += $"Продукт: {selectedProduct.ProductName}, Количество: {AddProductStore_CuounProduct.Text}\n";
 
+        int count = _context.StoreProducts.Count();
+        Debug.WriteLine($"Количество записей StoreProducts: {count}");
+
         if (selectedStore != null && selectedProduct != null && !string.IsNullOrEmpty(AddProductStore_CuounProduct.Text))
         {
-            using (var context = new Context())
-            {
-                var newProduct = new store_products
-                {
-                    StoreId = selectedStore,
-                    ProductId = selectedProduct,
-                    Quantity = Convert.ToInt32(AddProductStore_CuounProduct.Text)
-                };
-                context.StoreProducts.Add(newProduct);
-                context.SaveChanges();
-            }
+            AddFunctions.AddProductStore(selectedStore.StoreId, selectedProduct.ProductId, Convert.ToInt32(AddProductStore_CuounProduct.Text));
         }
 
         totalCost += Convert.ToDecimal(AddProductStore_CuounProduct.Text) * selectedProduct.Price;
         AddProductStore_TotalCost.Text = $"Итого: {totalCost}₽";
+    }
+
+    private void Delete_Product_Store(object? sender, RoutedEventArgs e)
+    {
+        Context _context = new Context();
+        var menegerStore = _context.Users.SingleOrDefault(x => x.Id == idUser);
+        var selectedStoreCheck = (StoreMenu.SelectedItem as stores).StoreId;
+        var storeInfoCheck = _context.Stores.SingleOrDefault(x => x.StoreId == selectedStoreCheck && x.ManagerId == menegerStore);
+        
+        if (storeInfoCheck == null)
+        {
+            InfoBoxMenu.Text = "Отказано в доступе!";
+        }
+        else if (StoreMenu.SelectedItem != null && StoreMenu.SelectedItem != null)
+        {
+            var storeInfo = _context.Stores.SingleOrDefault(x => x.StoreId == (StoreMenu.SelectedItem as stores).StoreId && x.ManagerId == menegerStore);
+            var selectedStore = _context.Stores.SingleOrDefault(x => x.StoreId == (StoreMenu.SelectedItem as stores).StoreId);
+            var products = _context.StoreProducts.Where(x => x.StoreId == selectedStore).Select(x => x.ProductId).ToList();
+            var list = _context.StoreProducts.Include(x => x.ProductId).Where(x => x.StoreId == selectedStore).ToList();
+            Delete_Product_Store_Product.Items = products;
+
+            Delete_Product_Store_InfoSklad.Text = $"Склад магазина: {selectedStore.StoreName}\n";
+            foreach (var item in list)
+            {
+                Delete_Product_Store_InfoSklad.Text += $"{item.ProductId.ProductName} в количестве {item.Quantity}\n";
+            }
+            
+            Delete_Product_Store_StakPanel.IsVisible = true;
+            Menu.IsVisible = false;
+            InfoBox.IsVisible = false;
+        }
+        else
+        {
+            InfoBoxMenu.Text = "Выберите магазин!";
+        }
+    }
+
+    private void Delete_Product_Store_StakPanel_Cancel(object? sender, RoutedEventArgs e)
+    {
+        Delete_Product_Store_StakPanel.IsVisible = false;
+        Menu.IsVisible = true;
+        InfoBox.IsVisible = true;
+    }
+
+    private void Delete_Product_Store_StakPanel_Delete(object? sender, RoutedEventArgs e)
+    {
+        Context _context = new Context();
+        var del = _context.StoreProducts.Include(x => x.ProductId).SingleOrDefault(x => x.StoreId == (StoreMenu.SelectedItem as stores) && x.ProductId == (Delete_Product_Store_Product.SelectedItem as products));
+        
+        if (del != null)
+        {
+            _context.StoreProducts.Remove(del);
+            _context.SaveChanges();
+            Delete_Product_Store_InfoBox.Text = $"{del.ProductId.ProductName} была удалено со склада";
+            
+            var selectedStore = _context.Stores.SingleOrDefault(x => x.StoreId == (StoreMenu.SelectedItem as stores).StoreId);
+            var list = _context.StoreProducts.Include(x => x.ProductId).Where(x => x.StoreId == selectedStore).ToList();
+            Delete_Product_Store_InfoSklad.Text = $"Склад магазина: {selectedStore.StoreName}\n";
+            foreach (var item in list)
+            {
+                Delete_Product_Store_InfoSklad.Text += $"{item.ProductId.ProductName} в количестве {item.Quantity}\n";
+            }
+        }
+        else
+        {
+            Delete_Product_Store_InfoBox.Text = $"{del.ProductId.ProductName} не удалось удалить.";
+        }
+    }
+    private async void Sold_Product_Store(object? sender, RoutedEventArgs e)
+    {
+        Context _context = new Context();
+        
+        var store = (StoreMenu.SelectedItem as stores);
+        
+            if (store == null)
+            {
+                InfoBoxMenu.Text = "Нужно выбрать магазин!";
+                return;
+            }
+        
+            var products = await _context.StoreProducts
+                .Include(x => x.ProductId)
+                .Include(x => x.StoreId)
+                .Where(x => x.StoreId == store)
+                .Select(x => new { x.ProductId, x.ProductId.ProductName, x.ProductId.Price, x.Quantity, x.StoreId, x.IdStoreProducts })
+                .ToListAsync();
+        
+            Sold_Product_Store_StakPanel_List.DataContext = products;
+            Sold_Product_Store_StakPanel.IsVisible = true;
+            Menu.IsVisible = false;
+            InfoBox.IsVisible = false;
+    }
+
+    private void Sold_Product_Store_StakPanel_List_Add(object? sender, RoutedEventArgs e)
+    {
+        try
+        {
+            Context _context = new Context();
+            var selectedProduct = Sold_Product_Store_StakPanel_List.SelectedItem as dynamic;
+            int productId = selectedProduct.ProductId.ProductId;
+
+
+            
+            var selectProdect2 = _context.Products.SingleOrDefault(x =>
+                x.ProductId == productId);
+            
+            var storeSelect = StoreMenu.SelectedItem as stores;
+            
+            var product = _context.Products.SingleOrDefault(x =>
+                x.ProductName == selectProdect2.ProductName).ProductId;
+            
+            var store = _context.Stores.SingleOrDefault(x => x.StoreName == storeSelect.StoreName).StoreId;
+            
+            AddFunctions.SellProduct(
+                product, 
+                Convert.ToInt32(Sold_Product_Store_StakPanel_CuounProduct.Text), 
+                store,
+                idUser);
+
+            Sold_Product_Store_StakPanel_InfoBox.Text += $"{selectProdect2.ProductName} - {Sold_Product_Store_StakPanel_CuounProduct.Text} * {selectProdect2.Price}\n";
+            totalCost += Convert.ToDecimal(Sold_Product_Store_StakPanel_CuounProduct.Text) * selectProdect2.Price;
+            Sold_Product_Store_StakPanel_TotalCost.Text = $"Итого: {totalCost}₽";
+        }
+        catch (Exception exception)
+        {
+            Sold_Product_Store_StakPanel_InfoBox.Text = $"{exception.Message}";
+        }
+    }
+
+    private void Sold_Product_Store_StakPanel_Cancel(object? sender, RoutedEventArgs e)
+    {
+        Sold_Product_Store_StakPanel.IsVisible = false;
+        Menu.IsVisible = true;
+        InfoBox.IsVisible = true;
+
+        Context _context = new Context();
+        var store = (StoreMenu.SelectedItem as stores).StoreId;
+        var storeP = StoreMenu.SelectedItem as stores;
+
+        var storeInfo = _context.Stores.Include(x => x.ManagerId).SingleOrDefault(x => x.StoreId == store);
+
+        TitleBlock.Text = "Склад магазина\n";
+        StoreInfo_NameStore.Text = $"Название магазина: {storeInfo.StoreName}";
+        StoreInfo_StoreLocation.Text = $"Адрес магазина: {storeInfo.StoreLocation}";
+        StoreInfo_Meneger.Text = $"Менеджер магазина: {storeInfo.ManagerId.Name}";
+
+        var products = _context.StoreProducts.Include(sp => sp.ProductId).Where(x => x.StoreId == storeP).ToList();
+        ProductsListStore.Text = "";
+        NameProductList.Text = "Продукты магазина";
+        foreach (var item in products)
+        {
+            ProductsListStore.Text += $"Продукт: {item.ProductId.ProductName} - Количество: {item.Quantity}\n";
+        }
+    }
+
+    private void Return_Products_To_Store(object? sender, RoutedEventArgs e)
+    {
+        // Пока что не работает, в будешум это должна быть кнопка для открытия формы возврата
+        Context _context = new Context();
+        var storeP = StoreMenu.SelectedItem as stores;
+        var user = _context.Users.SingleOrDefault(x => x.Id == idUser);
+        var soldproduct = _context.SoldProducts.SingleOrDefault(x => x.IdSoldProducts == 1);
+        var sale = _context.Sales.SingleOrDefault(x => x.SaleId == 1);
+        
+        
+        AddFunctions.ReturnProduct(soldproduct.ProductId.ProductId, 1, storeP.StoreId, idUser);
     }
 }
