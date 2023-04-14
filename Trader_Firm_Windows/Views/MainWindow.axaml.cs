@@ -458,14 +458,24 @@ public partial class MainWindow : Window
         Context _context = new Context();
         var selectedProduct = _context.Products.SingleOrDefault(x => x.ProductId == idProduct);
         var selectedStore = _context.Stores.SingleOrDefault(x => x.StoreId == (StoreMenu.SelectedItem as stores).StoreId);
-        
+
         AddProductStore_InfoBox.Text += $"Продукт: {selectedProduct.ProductName}, Количество: {AddProductStore_CuounProduct.Text}\n";
 
-        if (selectedStore != null && selectedProduct != null && AddProductStore_CuounProduct.Text != "")
+        if (selectedStore != null && selectedProduct != null && !string.IsNullOrEmpty(AddProductStore_CuounProduct.Text))
         {
-            AddFunctions.AddProductStore(selectedStore, selectedProduct, Convert.ToInt32(AddProductStore_CuounProduct.Text));
+            using (var context = new Context())
+            {
+                var newProduct = new store_products
+                {
+                    StoreId = selectedStore,
+                    ProductId = selectedProduct,
+                    Quantity = Convert.ToInt32(AddProductStore_CuounProduct.Text)
+                };
+                context.StoreProducts.Add(newProduct);
+                context.SaveChanges();
+            }
         }
-        
+
         totalCost += Convert.ToDecimal(AddProductStore_CuounProduct.Text) * selectedProduct.Price;
         AddProductStore_TotalCost.Text = $"Итого: {totalCost}₽";
     }
