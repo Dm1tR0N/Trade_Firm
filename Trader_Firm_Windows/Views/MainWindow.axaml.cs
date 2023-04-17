@@ -638,10 +638,60 @@ public partial class MainWindow : Window
         Context _context = new Context();
         var storeP = StoreMenu.SelectedItem as stores;
         var user = _context.Users.SingleOrDefault(x => x.Id == idUser);
-        var soldproduct = _context.SoldProducts.SingleOrDefault(x => x.IdSoldProducts == 1);
+        var soldproduct = _context.SoldProducts.Include(x => x.ProductId).SingleOrDefault(x => x.IdSoldProducts == 1);
         var sale = _context.Sales.SingleOrDefault(x => x.SaleId == 1);
         
         
-        AddFunctions.ReturnProduct(soldproduct.ProductId.ProductId, 1, storeP.StoreId, idUser);
+        // AddFunctions.ReturnProduct(soldproduct.ProductId.ProductId, 1, storeP.StoreId, idUser);
+        ReturnProduct.IsVisible = true;
+        Menu.IsVisible = false;
+        InfoBox.IsVisible = false;
+
+       var listSales = _context.Sales
+           .Where(x => x.UserId == _context.Users.SingleOrDefault(u => u.Id == idUser) && x.StoreId == storeP)
+           .ToList();
+       
+       //var listProducts = _context.SoldProducts
+           // .Include(x => x.SaleId)
+           //     .ThenInclude(s => s.StoreId)
+           // .Include(x => x.ProductId)
+           // .Where(x => listSales.Any(s => s.SaleId == x.SaleId.SaleId))
+           // .ToList();
+
+       var products = _context.SoldProducts
+           .Include(x => x.ProductId)
+           .Where(x => x.SaleId.UserId == _context.Users.SingleOrDefault(x => x.Id == idUser) &&
+                       DateTime.Compare(x.SaleId.SaleDate.AddDays(14), DateTime.Now.ToUniversalTime()) >= 0 &&
+                       x.Quantity > 0)
+           .ToList();
+       
+       ReturnProduct_StakPanel_List.Items = products;
+
+
+    }
+
+    private void ReturnProduct_Cancel(object? sender, RoutedEventArgs e)
+    {
+        ReturnProduct.IsVisible = false;
+        Menu.IsVisible = true;
+        InfoBox.IsVisible = true;
+
+        SelectStore(null, null);
+    }
+
+    private void ReturnProduct_Add(object? sender, RoutedEventArgs e)
+    {
+        var productId = (ReturnProduct_StakPanel_List.SelectedItem as dynamic);
+        var storeP = StoreMenu.SelectedItem as stores;
+        try
+        {
+            AddFunctions.ReturnProduct(productId.ProductId.ProductId, productId.Quantity, storeP.StoreId, idUser);
+            ReturnProduct_InfoBox.Text = "Товар возвращён.";
+            ReturnProduct_StakPanel_List.SelectedItem = null;
+        }
+        catch (Exception exception)
+        {
+            ReturnProduct_InfoBox.Text = $"{exception.Message}";
+        }
     }
 }

@@ -203,25 +203,49 @@ public class AddFunctions
         }
     }
     
-    public static void ReturnProduct(int productId, int quantity, int storeId, int userId) // Не работает
+    // Метод для возврата продукта на склад
+    
+    /*
+     * Метод должен создавать запись в таблицах returned_products, returns.
+     * Так-же он должен возвращать продукт в таблицу store_products
+     * Продукт можно вернуть в течении 14 дней
+     */
+    public static void ReturnProduct(int productId, int quantity, int storeId, int userId)
     {
         using (var context = new Context())
         {
-            // Проверяем, что магазин с заданным идентификатором существует
             var store = context.Stores.SingleOrDefault(s => s.StoreId == storeId);
             if (store == null)
             {
                 throw new ArgumentException("Магазин с таким идентификатором не найден.");
             }
-
-            // Проверяем, что продукт с заданным идентификатором существует
+    
             var product = context.Products.SingleOrDefault(p => p.ProductId == productId);
             if (product == null)
             {
                 throw new ArgumentException("Продукт с таким идентификатором не найден.");
             }
-
-            // Создаем объект возврата и сохраняем его в базу данных
+    
+            var sale = context.Sales.Where(s => s.StoreId.StoreId == storeId && s.UserId.Id == userId);
+            if (sale == null)
+            {
+                throw new ArgumentException("Этот пользователь не покупал товар в этом магазине.");
+            }
+            
+            
+            var soldProduct = context.SoldProducts
+                .SingleOrDefault(sp => sp.ProductId.ProductId == product.ProductId &&
+                                       sp.Quantity == quantity);
+            if (soldProduct == null)
+            {
+                throw new ArgumentException("Этот пользователь не купил этот товар.");
+            }
+    
+            if (quantity > soldProduct.Quantity)
+            {
+                throw new ArgumentException("Количество возвращаемого товара больше, чем было куплено.");
+            }
+    
             var returnObj = new returns
             {
                 StoreId = store,
@@ -229,16 +253,7 @@ public class AddFunctions
                 ReturnDate = DateTime.Now.ToUniversalTime()
             };
             context.Returns.Add(returnObj);
-            context.SaveChanges();
-
-            // Проверяем, что в магазине есть достаточное количество товара для возврата
-            var storeProduct = context.StoreProducts.SingleOrDefault(sp => sp.StoreId == store && sp.ProductId == product);
-            if (storeProduct == null || storeProduct.Quantity < quantity)
-            {
-                throw new ArgumentException("В магазине нет достаточного количества товара для возврата.");
-            }
-
-            // Создаем объекты возвращенных товаров и сохраняем их в базу данных
+    
             var returnedProduct = new returned_products
             {
                 ReturnId = returnObj,
@@ -247,12 +262,24 @@ public class AddFunctions
                 Price = product.Price
             };
             context.ReturnsProducts.Add(returnedProduct);
-            context.SaveChanges();
-
-            // Увеличиваем количество товара в магазине
+    
+            var storeProduct = context.StoreProducts.SingleOrDefault(sp => sp.StoreId.StoreId == store.StoreId && sp.ProductId.ProductId == product.ProductId);
+            if (storeProduct == null)
+            {
+                storeProduct = new store_products 
+                { 
+                    StoreId = store, 
+                    ProductId = product, 
+                    Quantity = 0 
+                };
+                context.StoreProducts.Add(storeProduct);
+            }
+    
             storeProduct.Quantity += quantity;
+    
+            soldProduct.Quantity -= quantity;
+    
             context.SaveChanges();
         }
     }
-
 }
