@@ -82,18 +82,17 @@ public class AddFunctions
     }
     
     // Добовление продукта в общий склад
-    public static void AddProduct(string Title, decimal Price, string Discription)
+    public static void AddProduct(string Title, decimal Price, string Discription, int storeId, int userId, int Quantity)
     {
         Context _context = new Context();
+        
         var productsList = _context.Products.ToList();
-
         var newProduct = new products
         {
             ProductName = Title,
             Description = Discription,
             Price = Price
         };
-
         productsList.Add(newProduct);
         _context.Add(newProduct);
         _context.SaveChanges();
@@ -114,7 +113,7 @@ public class AddFunctions
     }
 
     // Метод для добавления продукта в магазин
-    public static void AddProductStore(int selectedStore, int selectedProduct, int count)
+    public static void AddProductStore(int selectedStore, int selectedProduct, int count, int userId)
     {
         using (var context = new Context())
         {
@@ -141,8 +140,29 @@ public class AddFunctions
                     ProductId = productId,
                     Quantity = count
                 };
-
                 context.StoreProducts.Add(newProduct);
+                
+                var deliveriesList = context.Deliveries.ToList();
+                var newDeliveries = new deliveries
+                {
+                    StoreId = storeId,
+                    UserId = context.Users.SingleOrDefault(x => x.Id == userId),
+                    DeliveryDate = DateTime.Now.ToUniversalTime()
+                };
+                deliveriesList.Add(newDeliveries);
+                context.Add(newDeliveries);
+                context.SaveChanges();
+                
+                var deliveriesProductsList = context.DeliveredProducts.ToList();
+                var newdeliveriesProducts = new delivered_products
+                {
+                    DeliveryId = newDeliveries,
+                    ProductId = productId,
+                    Quantity = count
+                };
+                deliveriesProductsList.Add(newdeliveriesProducts);
+                context.Add(newdeliveriesProducts);
+                context.SaveChanges();
             }
 
             context.SaveChanges();

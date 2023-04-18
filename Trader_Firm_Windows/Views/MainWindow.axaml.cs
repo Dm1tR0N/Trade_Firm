@@ -192,7 +192,7 @@ public partial class MainWindow : Window
 
         if (checkUser.Role == role) // Создавать аккаунты может только администратор
         {
-            AddFunctions.AddProduct(ProductName.Text, Convert.ToDecimal(ProductPrice.Text), ProductDiscription.Text);
+            AddFunctions.AddProduct(ProductName.Text, Convert.ToDecimal(ProductPrice.Text), ProductDiscription.Text, (StoreMenu.SelectedItem as stores).StoreId, idUser, Convert.ToInt32(ProductQuantity.Text) );
             ProductInfoBox.Text =
                 $"Продукт: {ProductName.Text} Стоимостью {ProductPrice.Text}\nДля выхода нажмите 'Отмена'\n\n";
 
@@ -472,7 +472,7 @@ public partial class MainWindow : Window
 
         if (selectedStore != null && selectedProduct != null && !string.IsNullOrEmpty(AddProductStore_CuounProduct.Text))
         {
-            AddFunctions.AddProductStore(selectedStore.StoreId, selectedProduct.ProductId, Convert.ToInt32(AddProductStore_CuounProduct.Text));
+            AddFunctions.AddProductStore(selectedStore.StoreId, selectedProduct.ProductId, Convert.ToInt32(AddProductStore_CuounProduct.Text), idUser);
         }
 
         totalCost += Convert.ToDecimal(AddProductStore_CuounProduct.Text) * selectedProduct.Price;

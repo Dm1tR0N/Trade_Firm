@@ -1,32 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Дмитрий\\Desktop\\Projects\\Trade_Firm\\Trader_Firm_Windows\\Trader_Firm_Windows.csproj": {}
+    "C:\\Users\\ahish\\OneDrive\\Projects\\Trader_Firm_Windows\\Trader_Firm_Windows.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Дмитрий\\Desktop\\Projects\\Trade_Firm\\Trader_Firm_Windows\\Trader_Firm_Windows.csproj": {
+    "C:\\Users\\ahish\\OneDrive\\Projects\\Trader_Firm_Windows\\Trader_Firm_Windows.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Дмитрий\\Desktop\\Projects\\Trade_Firm\\Trader_Firm_Windows\\Trader_Firm_Windows.csproj",
+        "projectUniqueName": "C:\\Users\\ahish\\OneDrive\\Projects\\Trader_Firm_Windows\\Trader_Firm_Windows.csproj",
         "projectName": "Trader_Firm_Windows",
-        "projectPath": "C:\\Users\\Дмитрий\\Desktop\\Projects\\Trade_Firm\\Trader_Firm_Windows\\Trader_Firm_Windows.csproj",
-        "packagesPath": "C:\\Users\\Дмитрий\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Дмитрий\\Desktop\\Projects\\Trade_Firm\\Trader_Firm_Windows\\obj\\",
+        "projectPath": "C:\\Users\\ahish\\OneDrive\\Projects\\Trader_Firm_Windows\\Trader_Firm_Windows.csproj",
+        "packagesPath": "C:\\Users\\ahish\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ahish\\OneDrive\\Projects\\Trader_Firm_Windows\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Дмитрий\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\ahish\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -49,6 +42,10 @@
               "target": "Package",
               "version": "[0.10.18, )"
             },
+            "Avalonia.Controls.DataGrid": {
+              "target": "Package",
+              "version": "[0.10.18, )"
+            },
             "Avalonia.Desktop": {
               "target": "Package",
               "version": "[0.10.18, )"
@@ -65,15 +62,15 @@
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.0-preview.2.23128.3, )"
+              "version": "[7.0.2, )"
             },
             "Npgsql": {
               "target": "Package",
-              "version": "[8.0.0-preview.2, )"
+              "version": "[7.0.2, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
-              "version": "[8.0.0-preview.2, )"
+              "version": "[7.0.3, )"
             },
             "XamlNameReferenceGenerator": {
               "target": "Package",
@@ -96,7 +93,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -95,7 +95,7 @@
                 <TextBlock HorizontalAlignment="Center" Text="// Менеджер для каждого магазина 5"></TextBlock>
             </StackPanel>
             
-            <!-- Окно создания продукта -->
+            <!-- Окно добавления продукта на общий склад -->
             <StackPanel Background="#3c90b8" x:Name="AddProductWin" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsVisible="False" Margin="50">
                 <TextBlock HorizontalAlignment="Center" FontSize="24" Text="Добавление продукта"/>
                 <TextBlock Margin="10,0,0,0" Text="Название продукта"/>
@@ -104,6 +104,8 @@
                 <TextBox x:Name="ProductDiscription"></TextBox>
                 <TextBlock Margin="10,0,0,0" Text="Стоимость продукта"/>
                 <TextBox x:Name="ProductPrice"></TextBox>
+                <TextBlock Margin="10,0,0,0" Text="Количество продукта"/>
+                <TextBox x:Name="ProductQuantity"></TextBox>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
                     <Button Background="#acadd2" Content="Создать продукт" Click="AddProductWin_Create" Margin="0,0,10,0" />
                     <Button Background="#acadd2" Content="Отмена" Click="AddProductWin_Cancel" Margin="10,0, 10, 0"/>
